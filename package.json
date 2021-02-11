@@ -1,0 +1,8 @@
+{
+    "name": "com.kuro.unity-singleton",
+    "displayName": "UnitySingleton",
+    "version": "1.0.0",
+    "unity": "2020.2",
+    "description": "",
+    "dependencies": {}
+  }
