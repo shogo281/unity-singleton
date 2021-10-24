@@ -9,6 +9,7 @@ using UnityEngine;
 /// <typeparam name="T"></typeparam>
 public abstract class Singleton<T> where T : class, new()
 {
+    private static object lookObj = new object();
     private static T instance = null;
 
     /// <summary>
@@ -21,7 +22,10 @@ public abstract class Singleton<T> where T : class, new()
     /// </summary>
     public static void CreateInstance()
     {
-        Instance = new T();
+        lock (lookObj)
+        {
+            Instance = new T();
+        }
     }
 
     /// <summary>
@@ -29,6 +33,9 @@ public abstract class Singleton<T> where T : class, new()
     /// </summary>
     public void DestroyInstance()
     {
-        Instance = null;
+        lock (lookObj)
+        {
+            Instance = null;
+        }
     }
 }

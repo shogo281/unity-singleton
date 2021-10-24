@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using System.Threading;
 
 /// <summary>
 /// MonoBehaviour‚ÌƒVƒ“ƒOƒ‹ƒgƒ“
 /// </summary>
 public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBehaviour<T>
 {
+    private static object lookObj = new object();
     private static T instance = null;
 
     /// <summary>
@@ -21,12 +23,15 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : Single
     /// </summary>
     public void SetInstance()
     {
-        if (Instance != null)
+        lock (lookObj)
         {
-            return;
-        }
+            if (Instance != null)
+            {
+                return;
+            }
 
-        Instance = gameObject.GetComponent<T>();
+            Instance = gameObject.GetComponent<T>();
+        }
     }
 
     /// <summary>
@@ -34,12 +39,15 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : Single
     /// </summary>
     public void DestroyInstance()
     {
-        if (Instance == null)
+        lock (lookObj)
         {
-            return;
-        }
+            if (Instance == null)
+            {
+                return;
+            }
 
-        Destroy(Instance);
-        Instance = null;
+            Destroy(Instance);
+            Instance = null;
+        }
     }
 }
